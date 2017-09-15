@@ -8,8 +8,10 @@ else
 fi
 
 docker pull cptactionhank/atlassian-jira
+docker stop jira
+docker rm jira
 docker run \
-  --name note-nest-backend \
+  --name jira \
   --restart=always \
   -d \
   -p  8080:80 \
