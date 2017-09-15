@@ -12,5 +12,5 @@ docker run \
   --name note-nest-backend \
   --restart=always \
   -d \
-  -p  8080:8080 \
+  -p  8080:80 \
   cptactionhank/atlassian-jira:latest
