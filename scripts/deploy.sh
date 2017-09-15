@@ -7,6 +7,12 @@ else
   wget -qO- https://get.docker.com/ | sh
 fi
 
+# Allocate a swapfile
+fallocate -l 1G /swapfile
+chmod 600 /swapfile
+mkswap /swapfile
+swapon /swapfile
+
 docker pull cptactionhank/atlassian-jira
 docker stop jira
 docker rm jira
