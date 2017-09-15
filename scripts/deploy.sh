@@ -14,5 +14,5 @@ docker run \
   --name jira \
   --restart=always \
   -d \
-  -p  8080:80 \
+  -p 80:8080 \
   cptactionhank/atlassian-jira:latest
