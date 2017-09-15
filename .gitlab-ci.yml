@@ -1,0 +1,34 @@
+# .gitlab-ci.yml
+
+variables:
+  DOCKER_DRIVER: overlay
+  IMAGE_TAG: $CI_REGISTRY_IMAGE:latest
+  HOST_ADDR: 45.32.164.212
+
+stages:
+# - deploy_to_registry
+- deploy_to_vultr
+
+# deploy_to_registry:
+#   stage: deploy_to_registry
+#   image: docker:latest
+#   environment: production
+#   type: deploy
+#   services:
+#   - docker:dind # enable docker-in-docker service
+#   before_script:
+#   - pwd
+#   - docker info
+#   script:
+#   - scripts/docker-push-ci.sh
+#   only:
+#   - master
+
+deploy_to_vultr:
+  stage: deploy_to_vultr
+  before_script:
+  - . scripts/before_deploy.sh
+  script:
+  - eval "echo \"$(cat scripts/deploy.sh)\"" | ssh root@$HOST_ADDR 'bash -s'
+  only:
+  - master
