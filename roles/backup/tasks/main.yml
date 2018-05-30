@@ -19,18 +19,35 @@
         bash -c 'exec mysqldump --all-databases -uroot -p"{{ mysql_root_password }}"' \
         > ~/mysql_jira_db_backup_{{ backup_timestamp }}.sql"
 
-- name: archive backup file
+- name: archive mysql backup file
   archive:
     path: ~/mysql_jira_db_backup_{{ backup_timestamp }}.sql
     dest: ~/mysql_jira_db_backup_{{ backup_timestamp }}.sql.tgz
 
-- name: sync backup to s3
+- name: sync mysql backup to s3
   command: aws s3 cp ~/mysql_jira_db_backup_{{ backup_timestamp }}.sql.tgz s3://{{ aws_backups_bucket }} --force --acl private
   environment:
     AWS_ACCESS_KEY_ID: "{{ aws_backups_access_key_id }}"
     AWS_SECRET_ACCESS_KEY: "{{ aws_backups_secret_access_key }}"
 
-- name: clear backup file
+- name: clear mysql backup file
   file:
     path: ~/mysql_jira_db_backup_{{ backup_timestamp }}.sql
+    state: absent
+
+- name: archive jira home folder
+  archive:
+    path: /var/atlassian/jira
+    dest: ~/jira_home_folder_backup_{{ backup_timestamp }}.tgz
+    format: gz
+
+- name: sync jira home folder backup to s3
+  command: aws s3 cp ~/jira_home_folder_backup_{{ backup_timestamp }}.tgz s3://{{ aws_backups_bucket }} --force --acl private
+  environment:
+    AWS_ACCESS_KEY_ID: "{{ aws_backups_access_key_id }}"
+    AWS_SECRET_ACCESS_KEY: "{{ aws_backups_secret_access_key }}"
+
+- name: clear mysql backup file
+  file:
+    path: ~/jira_home_folder_backup_{{ backup_timestamp }}.tgz
     state: absent

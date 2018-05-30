@@ -1,4 +1,17 @@
 ---
+- name: create jira home directory
+  file:
+    path: /var/atlassian/jira
+    state: directory
+  
+- name: modify jira jome directory permissions
+  command: chown -Rf 2:2 /var/atlassian/jira
+
+- name: copy the dbconfig.xml file
+  copy:
+    content: "{{ lookup('template', '{{ role_path }}/files/dbconfig.xml') }}"
+    dest: /var/atlassian/jira/dbconfig.xml
+
 - name: pull jira image
   command: docker pull cptactionhank/atlassian-jira
 
@@ -17,5 +30,6 @@
       --restart=always \
       --name=mathhacks-jira \
       --link mathhacks-jira-db:mysql \
+      -v /var/atlassian/jira:/var/atlassian/jira \
       -p 80:8080 \
       cptactionhank/atlassian-jira:latest

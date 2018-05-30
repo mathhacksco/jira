@@ -24,16 +24,14 @@
       mysql:5.7.8
   when: build_mysql_container
 
-# - name: drop jira database (if it already exists)
-#   command: >
-#     docker exec \
-#       -d mathhacks-jira-db \
-#       bash -lc "mysql -uroot -p{{ mysql_root_password }} -e \"drop database if exists jira\""
-#   when: build_mysql_container
 
 - name: create jira database (if it doesn't already exist)
   command: >
     docker exec \
       -d mathhacks-jira-db \
-      bash -lc "mysql -uroot -p{{ mysql_root_password }} -e \"create database if not exists jira\""
+      bash -lc "\
+        mysql \
+          -uroot \
+          -p{{ mysql_root_password }} \
+          -e \"create database if not exists jira character set utf8 collate utf8_bin;\""
   when: build_mysql_container
