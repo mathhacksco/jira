@@ -1,0 +1,21 @@
+---
+- name: pull wordpress image
+  command: docker pull cptactionhank/atlassian-jira
+
+- name: stop wordpress container
+  command: docker stop mathhacks-jira
+  ignore_errors: yes
+
+- name: remove wordpress container
+  command: docker rm mathhacks-jira
+  ignore_errors: yes
+
+- name: run container
+  command: >
+    docker run \
+      -d \
+      --restart=always \
+      --name=mathhacks-jira \
+      --link mathhacks-jira-db:mysql \
+      -p 80:8080 \
+      cptactionhank/atlassian-jira:latest

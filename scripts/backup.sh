@@ -6,4 +6,4 @@ fi
 ansible-playbook \
     -M command \
     -i ./inventory/digitalocean \
-    ./plays/deploy.yml
+    ./plays/backup.yml
