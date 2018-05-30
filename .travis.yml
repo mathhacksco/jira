@@ -18,6 +18,7 @@ notifications:
 
 deploy:
   provider: script
-  script: ./scripts/deploy.sh
+  script: ./scripts/deploy-ci.sh
   on:
-    branch: master
+    branch: jonbrennecke/travis-ci
+    # branch: master
