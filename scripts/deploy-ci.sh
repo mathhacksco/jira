@@ -27,7 +27,7 @@ docker build -t mathhacksco/jira $(pwd)
 
 docker run \
   -e "ANSIBLE_VAULT_PASSWORD=$ANSIBLE_VAULT_PASSWORD" \
-  -v $(pwd)/deploy/ssh-keys:/root/.ssh \
+  -v $(pwd)/ssh-keys:/root/.ssh \
   mathhacksco/jira
 
 # clean up deploy key
