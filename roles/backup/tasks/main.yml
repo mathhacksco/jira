@@ -9,28 +9,28 @@
 
 - name: clear backup file (if it exists)
   file:
-    path: ~/mysql_backup_{{ backup_timestamp }}.sql
+    path: ~/mysql_jira_db_backup_{{ backup_timestamp }}.sql
     state: absent
 
 - name: run mysqldump in running container
   command: >
     bash -cl "\
-      docker exec mathhacks-wordpress-db \
+      docker exec mathhacks-jira-db \
         bash -c 'exec mysqldump --all-databases -uroot -p"{{ mysql_root_password }}"' \
-        > ~/mysql_backup_{{ backup_timestamp }}.sql"
+        > ~/mysql_jira_db_backup_{{ backup_timestamp }}.sql"
 
 - name: archive backup file
   archive:
-    path: ~/mysql_backup_{{ backup_timestamp }}.sql
-    dest: ~/mysql_backup_{{ backup_timestamp }}.sql.tgz
+    path: ~/mysql_jira_db_backup_{{ backup_timestamp }}.sql
+    dest: ~/mysql_jira_db_backup_{{ backup_timestamp }}.sql.tgz
 
 - name: sync backup to s3
-  command: aws s3 cp ~/mysql_backup_{{ backup_timestamp }}.sql.tgz s3://{{ aws_backups_bucket }} --force --acl private
+  command: aws s3 cp ~/mysql_jira_db_backup_{{ backup_timestamp }}.sql.tgz s3://{{ aws_backups_bucket }} --force --acl private
   environment:
     AWS_ACCESS_KEY_ID: "{{ aws_backups_access_key_id }}"
     AWS_SECRET_ACCESS_KEY: "{{ aws_backups_secret_access_key }}"
 
 - name: clear backup file
   file:
-    path: ~/mysql_backup_{{ backup_timestamp }}.sql
+    path: ~/mysql_jira_db_backup_{{ backup_timestamp }}.sql
     state: absent

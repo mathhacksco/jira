@@ -1,12 +1,12 @@
 ---
-- name: pull wordpress image
+- name: pull jira image
   command: docker pull cptactionhank/atlassian-jira
 
-- name: stop wordpress container
+- name: stop jira container
   command: docker stop mathhacks-jira
   ignore_errors: yes
 
-- name: remove wordpress container
+- name: remove jira container
   command: docker rm mathhacks-jira
   ignore_errors: yes
 
